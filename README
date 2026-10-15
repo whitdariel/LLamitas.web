@@ -1,1 +1,107 @@
-LLAMTAS
+erDiagram
+    Rol {
+        int id_rol PK
+        string nombre
+        string descripcion
+    }
+    Usuario {
+        int id_usuario PK
+        string nombre
+        string apellido
+        string correo
+        string contrasena
+        string telefono
+        int id_rol FK
+        enum estado
+        timestamp fecha_creacion
+    }
+    Categoria {
+        int id_categoria PK
+        string nombre
+        string descripcion
+    }
+    Modulo {
+        int id_modulo PK
+        string nombre
+        string descripcion
+        int id_categoria FK
+    }
+    Permiso {
+        int id_permiso PK
+        int id_rol FK
+        int id_modulo FK
+        boolean puede_leer
+        boolean puede_crear
+        boolean puede_editar
+        boolean puede_eliminar
+    }
+    Proveedor {
+        int id_proveedor PK
+        string nombre
+        string telefono
+        string direccion
+        string email
+    }
+    Producto {
+        int id_producto PK
+        int id_categoria FK
+        string nombre
+        string marca
+        string modelo
+        string descripcion
+        decimal precio_compra
+        decimal precio_venta
+        int stock_actual
+        enum estado
+    }
+    Inventario {
+        int id_inventario PK
+        int id_producto FK
+        int id_proveedor FK
+        int cantidad
+        string ubicacion
+        timestamp fecha_ingreso
+        enum estado
+    }
+    Venta {
+        int id_venta PK
+        int id_usuario FK
+        timestamp fecha
+        decimal total
+        enum metodo_pago
+        enum estado
+    }
+    Detalle_Venta {
+        int id_detalle PK
+        int id_venta FK
+        int id_producto FK
+        int cantidad
+        decimal precio_unitario
+    }
+    Material_Precio {
+        int id_material PK
+        int id_producto FK
+        string nombre
+        decimal precio
+        timestamp fecha_actualizacion
+    }
+    Analisis {
+        int id_analisis PK
+        int id_producto FK
+        string tipo
+        timestamp fecha
+        decimal resultado_precio
+    }
+
+    Rol ||--o{ Usuario : "posee"
+    Rol ||--o{ Permiso : "asigna"
+    Modulo ||--o{ Permiso : "aplica"
+    Categoria ||--o{ Modulo : "agrupa"
+    Categoria ||--o{ Producto : "pertenece"
+    Producto ||--o{ Inventario : "ingresa"
+    Proveedor ||--o{ Inventario : "surtido_por"
+    Usuario ||--o{ Venta : "registra"
+    Venta ||--o{ Detalle_Venta : "contiene"
+    Producto ||--o{ Detalle_Venta : "incluido_en"
+    Producto ||--o{ Material_Precio : "historial_precios"
+    Producto ||--o{ Analisis : "genera_analisis"
